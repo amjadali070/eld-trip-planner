@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: #0a1628;
+  color: #F8FAFC;
+  margin: 0;
+}
+
+/* Leaflet fixes */
+.leaflet-container { height: 100%; width: 100%; border-radius: 8px; }
+
+/* Grid animations */
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+.log-canvas { image-rendering: crisp-edges; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1A2E4A; }
+::-webkit-scrollbar-thumb { background: #F59E0B; border-radius: 3px; }
