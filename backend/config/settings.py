@@ -3,9 +3,19 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key-change-in-production')
-DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+# Helper to strip quotes from boolean strings
+def config_bool(name, default=False):
+    val = str(config(name, default=default)).strip('"\' ').lower()
+    return val in ('true', '1', 'yes', 'on')
+
+# Helper to strip quotes from list strings
+def config_list(name, default=''):
+    raw = str(config(name, default=default)).strip('"\' ')
+    return [item.strip('"\' ') for item in raw.split(',') if item.strip('"\' ')]
+
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key-change-in-production').strip('"\' ')
+DEBUG = config_bool('DEBUG', default=True)
+ALLOWED_HOSTS = config_list('ALLOWED_HOSTS', default='*')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,11 +87,8 @@ REST_FRAMEWORK = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:5173'
-).split(',')
-CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bool)
+CORS_ALLOWED_ORIGINS = config_list('CORS_ALLOWED_ORIGINS', default='http://localhost:5173')
+CORS_ALLOW_ALL_ORIGINS = config_bool('CORS_ALLOW_ALL_ORIGINS', default=False)
 
 # External API timeouts
 OSRM_BASE_URL = 'http://router.project-osrm.org'
